@@ -2,22 +2,28 @@
 
 function connexionBDD()
 {
-	try
-	{
-		$conn = mysqli_init();
-                mysqli_ssl_set($conn,NULL,NULL, __DIR__ . "/DigiCertGlobalRootCA.crt.pem", NULL, NULL);
-                mysqli_real_connect($conn, 'mydemoserver.mysql.database.azure.com', 'myadmin', 'yourpassword', 'quickstartdb', 3306, MYSQLI_CLIENT_SSL);
-                if (mysqli_connect_errno()) {
-                	die('Failed to connect to MySQL: '.mysqli_connect_error());
-		}
-            $bdd = new PDO('mysql:host=servbd;port=3306;dbname=bdd_geststages;charset=utf8', 'usergs', 'mdpGS', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    try
+    {
+        $options = array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_SSL_CA => 'DigiCertGlobalRootCA.crt.pem' // Chemin vers le certificat RootCA de Azure
+            );
+    
+            $bdd = new PDO(
+            'mysql:host=mamegeststages.mysql.database.azure.com.mysql.database.azure.com;port=3306;dbname=bdd_geststages;charset=utf8',
+            'mame',
+            'Simplon2024@',
+            $options
+        );
+            //array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
             return $bdd;
-	}
-	catch(Exception $e)
-	{
-		$pdo_error = $e->getMessage();
+    }
+    catch(Exception $e)
+    {
+        $pdo_error = $e->getMessage();
                 return false;
-	}
+    }
     
 }
 
